@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>VGLootTint</AssemblyName>
-    <Product>Vanguard Galaxy Loot Tint</Product>
+    <Product>Loot Tint</Product>
     <Version>0.1.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>

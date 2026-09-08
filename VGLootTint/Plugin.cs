@@ -10,7 +10,7 @@ namespace VGLootTint;
 public class Plugin : BaseUnityPlugin
 {
     public const string PluginGuid = "vglootint";
-    public const string PluginName = "Vanguard Galaxy Loot Tint";
+    public const string PluginName = "Loot Tint";
     // BepInEx parses PluginVersion through System.Version which rejects SemVer
     // pre-release suffixes, so stick to the plain N.N.N form.
     public const string PluginVersion = "0.1.0";

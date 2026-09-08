@@ -1,4 +1,4 @@
-# Vanguard Galaxy Loot Tint (VGLootTint)
+# Loot Tint (VGLootTint)
 
 ![Standard "+1 Corebuster Charge" stays vanilla white, Enhanced "+1 Railgun Mk.VII" tinted blue](docs/screenshots/pickup-tint.png)
 
@@ -22,7 +22,7 @@ A BepInEx plugin for [Vanguard Galaxy](https://store.steampowered.com/app/347180
    ```
 5. **Launch the game.** Open the BepInEx console — you should see a load line ending with the patch count, e.g.:
    ```
-   [Info :Vanguard Galaxy Loot Tint] Vanguard Galaxy Loot Tint v0.1.0 loaded (1 patches)
+   [Info :Loot Tint] Loot Tint v0.1.0 loaded (1 patches)
    ```
 
 ## Uninstall
