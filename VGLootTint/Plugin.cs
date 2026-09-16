@@ -1,38 +1,32 @@
-using System.Linq;
+using System;
 using BepInEx;
-using BepInEx.Logging;
-using HarmonyLib;
+using VGModAPI;
 
 namespace VGLootTint;
 
 [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
 [BepInProcess("VanguardGalaxy.exe")]
+[BepInDependency(ModApi.PluginId)]
 public class Plugin : BaseUnityPlugin
 {
     public const string PluginGuid = "vglootint";
     public const string PluginName = "Loot Tint";
-    // BepInEx parses PluginVersion through System.Version which rejects SemVer
-    // pre-release suffixes, so stick to the plain N.N.N form.
     public const string PluginVersion = "0.1.0";
 
-    internal static Plugin Instance { get; private set; } = null!;
-    internal static ManualLogSource Log { get; private set; } = null!;
-
-    private Harmony _harmony = null!;
+    private IDisposable? _registration;
 
     private void Awake()
     {
-        Instance = this;
-        Log = Logger;
-
-        _harmony = new Harmony(PluginGuid);
-        _harmony.PatchAll();
-
-        Log.LogInfo($"{PluginName} v{PluginVersion} loaded ({_harmony.GetPatchedMethods().Count()} patches)");
+        var presentation = ModApi.Services.PickupPresentation;
+        _registration = presentation.Register(PluginGuid, pickup => pickup.RarityColor);
+        Logger.LogInfo($"{PluginName} v{PluginVersion} loaded (VGModAPI pickup presentation)");
+        if (!presentation.Availability.IsAvailable)
+            Logger.LogWarning("Pickup presentation is unavailable; leaving vanilla colors unchanged.");
     }
 
     private void OnDestroy()
     {
-        _harmony?.UnpatchSelf();
+        _registration?.Dispose();
+        _registration = null;
     }
 }
