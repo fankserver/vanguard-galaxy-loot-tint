@@ -12,7 +12,9 @@ PLUGIN_DIR := $(GAME_DIR)/BepInEx/plugins
 # Resolve dotnet — prefer explicit local SDK, fall back to PATH
 DOTNET   ?= $(shell command -v dotnet 2>/dev/null || echo /tmp/dnsdk/dotnet/dotnet)
 
-.PHONY: all build link-asm clean deploy check-bepinex
+VGAPI_DLL ?= ../vanguard-galaxy-api/VGModAPI.Abstractions/bin/Debug/netstandard2.1/VGModAPI.Abstractions.dll
+
+.PHONY: all build clean deploy check-bepinex
 
 all: build
 
@@ -23,16 +25,9 @@ check-bepinex:
 		exit 1 ; \
 	}
 
-# Symlink the game's Assembly-CSharp.dll into VGLootTint/lib/ for compilation references.
-link-asm:
-	@mkdir -p VGLootTint/lib
-	@if [ ! -e "VGLootTint/lib/Assembly-CSharp.dll" ]; then \
-		ln -sf "$(GAME_DIR)/VanguardGalaxy_Data/Managed/Assembly-CSharp.dll" VGLootTint/lib/Assembly-CSharp.dll ; \
-		echo "Linked Assembly-CSharp.dll" ; \
-	fi
-
-build: link-asm
-	DOTNET_ROOT=$(dir $(DOTNET)) $(DOTNET) build VGLootTint/VGLootTint.csproj -c $(CONFIG)
+build:
+	@test -s "$(VGAPI_DLL)" || { echo 'Set VGAPI_DLL to the pickup-presentation API build.'; exit 1; }
+	DOTNET_ROOT=$(dir $(DOTNET)) $(DOTNET) build VGLootTint/VGLootTint.csproj -c $(CONFIG) -p:VGAPI_DLL="$(abspath $(VGAPI_DLL))"
 
 deploy: build check-bepinex
 	@mkdir -p "$(PLUGIN_DIR)"
